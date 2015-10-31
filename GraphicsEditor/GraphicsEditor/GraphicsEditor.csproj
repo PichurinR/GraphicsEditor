@@ -67,6 +67,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Painter.cs" />
+    <Compile Include="PainterCircle.cs" />
+    <Compile Include="PainterLine.cs" />
+    <Compile Include="PainterPencil.cs" />
+    <Compile Include="PainterRectangle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
