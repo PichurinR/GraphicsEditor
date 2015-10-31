@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace GraphicsEditor
@@ -13,26 +14,35 @@ namespace GraphicsEditor
     {
         Canvas canvas;
         Line line;
+        bool flag = false;
+        
         public PainterLine(Canvas canvas)
         {
             this.canvas = canvas;
-            this.line = new Line();
         }
         public override void StartDrawing(Point point)
         {
-            throw new NotImplementedException();
+            flag = true;
+            line = new Line();
+            line.Stroke = System.Windows.Media.Brushes.Blue;  //dell_____________________use colorpikker
+            canvas.Children.Add(line);
+            line.X1 = point.X;
+            line.Y1 = point.Y;
         }
 
         public override void Drawing(Point point)
         {
-            throw new NotImplementedException();
+            if (flag)
+            {
+                line.X2 = point.X;
+                line.Y2 = point.Y;
+            }
         }
 
-        public override void StopDrawing(Point point)
+        public override void StopDrawing()
         {
-            throw new NotImplementedException();
+            flag = false;
         }
-
         public override void CanvasNull()
         {
             throw new NotImplementedException();
