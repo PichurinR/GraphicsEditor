@@ -6,21 +6,27 @@ using System.Windows.Shapes;
 
 namespace GraphicsEditor
 {
-    class PainterPencil:Painter
-    {
+    class PainterPencil : Painter
+     {
         Canvas canvas;
         Polyline pencil;
         bool flag = false;
         PointCollection pointCollect;
-        public PainterPencil(Canvas canvas)
+        Brush br;
+        public PainterPencil(Canvas canvas, Color b)
         {
+            
             this.canvas = canvas;
+            br= new SolidColorBrush(b);
+           
         }
+
+        
         public override void StartDrawing(Point point)
         {
             flag = true;
             pencil = new Polyline();
-            pencil.Stroke = System.Windows.Media.Brushes.Blue;  //dell_____________________use colorpikker
+            pencil.Stroke = br;
             canvas.Children.Add(pencil);
             pointCollect = new PointCollection();
             pointCollect.Add(point);

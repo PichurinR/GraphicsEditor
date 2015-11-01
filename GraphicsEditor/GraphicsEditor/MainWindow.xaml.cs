@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
 
 namespace GraphicsEditor
 {
@@ -26,10 +27,11 @@ namespace GraphicsEditor
         }
 
         Painter painter;
-
+        
         private void toolPencil_Click(object sender, RoutedEventArgs e)
         {
-            painter = new PainterPencil(myCanvas);
+            painter = new PainterPencil(myCanvas, strokeColorPick.SelectedColor.Value);
+            
         }
 
         private void toolLine_Click(object sender, RoutedEventArgs e)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,11 +10,12 @@ namespace GraphicsEditor
 {
     class PainterCircle : Painter
     {
+       
         Canvas canvas;
         Ellipse circle;
         bool flag = false;
         Point startPoint;
-
+      
         public PainterCircle(Canvas canvas)
         {
             this.canvas = canvas;
@@ -26,6 +26,7 @@ namespace GraphicsEditor
             flag = true;
             circle = new Ellipse();
             circle.Stroke = System.Windows.Media.Brushes.DarkGreen;  //dell_____________________use colorpikker
+            circle.Fill = System.Windows.Media.Brushes.Beige;
             canvas.Children.Add(circle);
             startPoint = point;
         }
