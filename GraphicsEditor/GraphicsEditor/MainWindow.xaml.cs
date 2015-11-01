@@ -24,15 +24,29 @@ namespace GraphicsEditor
         {
             InitializeComponent();
         }
+
         Painter painter;
+
         private void toolPencil_Click(object sender, RoutedEventArgs e)
         {
             painter = new PainterPencil(myCanvas);
         }
+
         private void toolLine_Click(object sender, RoutedEventArgs e)
         {
             painter = new PainterLine(myCanvas);        
         }
+
+        private void toolRectangle_Click(object sender, RoutedEventArgs e)
+        {
+            painter = new PainterRectangle(myCanvas);
+        }
+
+        private void toolCircle_Click(object sender, RoutedEventArgs e)
+        {
+            painter = new PainterCircle(myCanvas);
+        }
+
         private void myCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (painter!=null)
@@ -47,7 +61,6 @@ namespace GraphicsEditor
             {
                 painter.Drawing(new Point(e.GetPosition(myCanvas).X, e.GetPosition(myCanvas).Y));
             }
-
         }
 
         private void myCanvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -56,19 +69,12 @@ namespace GraphicsEditor
             {
                 painter.StopDrawing();
             }
-
         }
 
         private void clearButton_Click(object sender, RoutedEventArgs e)
         {
             myCanvas.Children.Clear();
         }
-
-        
-
-      
-
-
-      
+              
     }
 }
