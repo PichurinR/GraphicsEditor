@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,7 +28,7 @@ namespace GraphicsEditor
         {
             InitializeComponent();
             bs = new BrushSettings();
-            
+            toolPencil_Click(new object(), new RoutedEventArgs());
         }
 
         
@@ -88,13 +87,63 @@ namespace GraphicsEditor
         private void clearButton_Click(object sender, RoutedEventArgs e)
         {
             myCanvas.Children.Clear();
+            myCanvas.Background=Brushes.White;
         }
          
         private void openFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFD = new OpenFileDialog();
-            openFD.ShowDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\" ;
+            openFileDialog.Filter = "BMP files (*.bmp)|*.bmp";
+            openFileDialog.RestoreDirectory = true;     //Востанавливать ранее отркытый путь к файлу
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ImageBrush img = new ImageBrush();
+                img.ImageSource = new BitmapImage(new Uri(openFileDialog.FileName, UriKind.Relative));
+                myCanvas.Background = img;
+            }
+        }
+
+        private void saveFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = "c:\\";
+            saveFileDialog.FileName = "MyPicture";      // Имя по умолчанию
+            saveFileDialog.Filter = "BMP files (*.bmp)|*.bmp";
+            saveFileDialog.ShowDialog();
+            util.SaveCanvas(myCanvas, 96, saveFileDialog.FileName);
         }
               
     }
+    public static class util
+    {
+        public static void SaveCanvas(Canvas canvas, int dpi, string filename)
+        {
+
+            Rect rect = new Rect(canvas.Margin.Left, canvas.Margin.Top, canvas.ActualWidth, canvas.ActualHeight);   //Получаем ширину и высоту нашего будущего изображения(квадрата)
+
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right, (int)rect.Bottom, dpi, dpi, System.Windows.Media.PixelFormats.Default); // через  обьект класса RenderTargetBitmap будем преобразовывать canvas в растровое изображение
+
+            rtb.Render(canvas);
+
+            BitmapEncoder pngEncoder =new BmpBitmapEncoder(); // опредиляем кодировщик, для кодирования изображения
+            pngEncoder.Frames.Add(BitmapFrame.Create(rtb)); // задайом фрейм для изображения
+
+            try
+            {
+                System.IO.MemoryStream ms = new System.IO.MemoryStream(); //Создаем поток в память.
+
+                pngEncoder.Save(ms);  // кодируем изображение в наш поток
+                ms.Close();          //Закрываем поток
+
+                System.IO.File.WriteAllBytes(filename, ms.ToArray()); // Создаем файл, записываем в него масив байтов и закрываем
+            }
+            catch (Exception err)
+            {
+                System.Windows.MessageBox.Show(err.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+      
+    } 
 }

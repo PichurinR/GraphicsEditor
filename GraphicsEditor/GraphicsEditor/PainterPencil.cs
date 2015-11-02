@@ -12,7 +12,6 @@ namespace GraphicsEditor
         Polyline pencil;
         bool flag = false;
         PointCollection pointCollect;
-        Brush br;
         public PainterPencil(Canvas canvas)
         {
             this.canvas = canvas;

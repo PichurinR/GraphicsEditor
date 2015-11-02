@@ -14,7 +14,7 @@ namespace GraphicsEditor
         Canvas canvas;
         Line line;
         bool flag = false;
-        
+        Point temp;
         public PainterLine(Canvas canvas)
         {
             this.canvas = canvas;
@@ -23,16 +23,19 @@ namespace GraphicsEditor
         {
             flag = true;
             line = new Line();
+            temp = point;
             line.Stroke = new SolidColorBrush(bs.colorStrocke);
             canvas.Children.Add(line);
-            line.X1 = point.X;
-            line.Y1 = point.Y;
+           
         }
 
         public override void Drawing(Point point)
         {
+           
             if (flag)
             {
+                line.X1 = temp.X;
+                line.Y1 = temp.Y;
                 line.X2 = point.X;
                 line.Y2 = point.Y;
             }
