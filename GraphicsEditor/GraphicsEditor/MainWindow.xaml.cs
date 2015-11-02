@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,39 +22,50 @@ namespace GraphicsEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        Painter painter;
+        BrushSettings bs;
+
         public MainWindow()
         {
             InitializeComponent();
+            bs = new BrushSettings();
+            
         }
 
-        Painter painter;
+        
         
         private void toolPencil_Click(object sender, RoutedEventArgs e)
         {
-            painter = new PainterPencil(myCanvas, strokeColorPick.SelectedColor.Value);
-            
+            painter = new PainterPencil(myCanvas);
+            fillColorPick.IsEnabled = false;
         }
 
         private void toolLine_Click(object sender, RoutedEventArgs e)
         {
-            painter = new PainterLine(myCanvas);        
+            painter = new PainterLine(myCanvas);
+            fillColorPick.IsEnabled = false;
         }
 
         private void toolRectangle_Click(object sender, RoutedEventArgs e)
         {
             painter = new PainterRectangle(myCanvas);
+            fillColorPick.IsEnabled = true;
         }
 
         private void toolCircle_Click(object sender, RoutedEventArgs e)
         {
             painter = new PainterCircle(myCanvas);
+            fillColorPick.IsEnabled = true;
         }
 
         private void myCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            
             if (painter!=null)
             {
-                painter.StartDrawing(new Point(e.GetPosition(myCanvas).X, e.GetPosition(myCanvas).Y));
+                bs.colorStrocke = strokeColorPick.SelectedColor.Value;
+                bs.colorFill = fillColorPick.SelectedColor.Value;
+                painter.StartDrawing(new Point(e.GetPosition(myCanvas).X, e.GetPosition(myCanvas).Y),bs);
             }
         }
 
@@ -76,6 +88,12 @@ namespace GraphicsEditor
         private void clearButton_Click(object sender, RoutedEventArgs e)
         {
             myCanvas.Children.Clear();
+        }
+         
+        private void openFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFD = new OpenFileDialog();
+            openFD.ShowDialog();
         }
               
     }

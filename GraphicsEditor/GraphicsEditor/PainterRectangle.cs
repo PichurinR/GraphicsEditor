@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows;
+using System.Windows.Media;
 
 namespace GraphicsEditor
 {
@@ -20,11 +21,12 @@ namespace GraphicsEditor
         {
             this.canvas = canvas;
         }
-        public override void StartDrawing(Point point)
+        public override void StartDrawing(Point point, BrushSettings bs)
         {
             flag = true;
             rectangl = new Rectangle();
-            rectangl.Stroke = System.Windows.Media.Brushes.DarkGreen;  //dell_____________________use colorpikker
+            rectangl.Stroke = new SolidColorBrush(bs.colorStrocke);
+            rectangl.Fill= new SolidColorBrush(bs.colorFill);
             canvas.Children.Add(rectangl);
             startPoint = point;
         }

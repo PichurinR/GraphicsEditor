@@ -19,11 +19,11 @@ namespace GraphicsEditor
         {
             this.canvas = canvas;
         }
-        public override void StartDrawing(Point point)
+        public override void StartDrawing(Point point,BrushSettings bs)
         {
             flag = true;
             line = new Line();
-            line.Stroke = System.Windows.Media.Brushes.Blue;  //dell_____________________use colorpikker
+            line.Stroke = new SolidColorBrush(bs.colorStrocke);
             canvas.Children.Add(line);
             line.X1 = point.X;
             line.Y1 = point.Y;

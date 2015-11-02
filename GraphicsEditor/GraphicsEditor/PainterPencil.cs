@@ -13,20 +13,17 @@ namespace GraphicsEditor
         bool flag = false;
         PointCollection pointCollect;
         Brush br;
-        public PainterPencil(Canvas canvas, Color b)
+        public PainterPencil(Canvas canvas)
         {
-            
             this.canvas = canvas;
-            br= new SolidColorBrush(b);
-           
         }
 
         
-        public override void StartDrawing(Point point)
+        public override void StartDrawing(Point point,BrushSettings bs)
         {
             flag = true;
             pencil = new Polyline();
-            pencil.Stroke = br;
+            pencil.Stroke = new SolidColorBrush(bs.colorStrocke);
             canvas.Children.Add(pencil);
             pointCollect = new PointCollection();
             pointCollect.Add(point);

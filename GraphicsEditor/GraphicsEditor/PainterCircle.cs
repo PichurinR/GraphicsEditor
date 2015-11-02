@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace GraphicsEditor
@@ -19,14 +20,15 @@ namespace GraphicsEditor
         public PainterCircle(Canvas canvas)
         {
             this.canvas = canvas;
+
         }
 
-        public override void StartDrawing(Point point)
+        public override void StartDrawing(Point point,BrushSettings bs)
         {
             flag = true;
             circle = new Ellipse();
-            circle.Stroke = System.Windows.Media.Brushes.DarkGreen;  //dell_____________________use colorpikker
-            circle.Fill = System.Windows.Media.Brushes.Beige;
+            circle.Stroke = new SolidColorBrush(bs.colorStrocke);
+            circle.Fill = new SolidColorBrush(bs.colorFill);
             canvas.Children.Add(circle);
             startPoint = point;
         }
