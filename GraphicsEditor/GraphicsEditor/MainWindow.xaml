@@ -140,6 +140,7 @@
                HorizontalAlignment="Left"
                VerticalAlignment="Top"
                Content="Fill" />
+        <Button x:Name="edit" Content="Edit" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Width="99" Click="edit_Click"/>
 
     </Grid>
 </Window>
