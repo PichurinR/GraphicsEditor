@@ -96,11 +96,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Painter.cs" />
-    <Compile Include="PainterCircle.cs" />
-    <Compile Include="PainterLine.cs" />
-    <Compile Include="PainterPencil.cs" />
-    <Compile Include="PainterRectangle.cs" />
+    <Compile Include="Model\Painter.cs" />
+    <Compile Include="Model\PainterCircle.cs" />
+    <Compile Include="Model\PainterLine.cs" />
+    <Compile Include="Model\PainterPencil.cs" />
+    <Compile Include="Model\PainterRectangle.cs" />
+    <Compile Include="Model\WorkingWithImages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,6 +129,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

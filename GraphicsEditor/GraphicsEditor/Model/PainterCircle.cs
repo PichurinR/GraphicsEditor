@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Shapes;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
-namespace GraphicsEditor
+namespace GraphicsEditor.Model
 {
-    class PainterRectangle:Painter
+    class PainterCircle : Painter
     {
+       
         Canvas canvas;
-        Rectangle rectangl;
+        Ellipse circle;
         bool flag = false;
         Point startPoint;
-
-        public PainterRectangle(Canvas canvas)
+      
+        public PainterCircle(Canvas canvas)
         {
             this.canvas = canvas;
+
         }
-        public override void StartDrawing(Point point, BrushSettings bs)
+
+        public override void StartDrawing(Point point,BrushSettings bs)
         {
             flag = true;
-            rectangl = new Rectangle();
-            rectangl.Stroke = new SolidColorBrush(bs.colorStrocke);
-            rectangl.Fill= new SolidColorBrush(bs.colorFill);
-            canvas.Children.Add(rectangl);
+            circle = new Ellipse();
+            circle.Stroke = new SolidColorBrush(bs.colorStrocke);
+            circle.Fill = new SolidColorBrush(bs.colorFill);
+            canvas.Children.Add(circle);
             startPoint = point;
         }
 
@@ -43,22 +45,21 @@ namespace GraphicsEditor
                 double w = Math.Max(pos.X, startPoint.X) - x;
                 double h = Math.Max(pos.Y, startPoint.Y) - y;
 
-                rectangl.Width = w;
-                rectangl.Height = h;
+                circle.Width = w;
+                circle.Height = h;
 
-                Canvas.SetLeft(rectangl, x);
-                Canvas.SetTop(rectangl, y);
+                Canvas.SetLeft(circle, x);
+                Canvas.SetTop(circle, y);
             }
         }
-
+         
         public override void StopDrawing()
         {
             flag = false;
         }
-
         public override void CanvasNull()
         {
-           
+            throw new NotImplementedException();
         }
     }
 }
