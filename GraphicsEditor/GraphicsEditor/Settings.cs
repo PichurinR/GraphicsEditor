@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace GraphicsEditor
 {
-    class BrushSettings
+    class Settings
     {
         public Color colorStrocke { get; set; }
         public Color colorFill { get; set; }

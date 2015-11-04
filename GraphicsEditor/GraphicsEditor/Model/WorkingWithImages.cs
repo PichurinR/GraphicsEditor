@@ -38,9 +38,12 @@ namespace GraphicsEditor.Model
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = "c:\\";
-            saveFileDialog.FileName = "Picture_"+DateTime.Now;      // Имя по умолчанию
+            saveFileDialog.FileName = "Picture_"+DateTime.Now.GetHashCode();      // Имя по умолчанию
             saveFileDialog.Filter = "BMP files (*.bmp)|*.bmp";
             saveFileDialog.ShowDialog();
+            
+            Thickness margin = canvas.Margin;
+            canvas.Margin = new Thickness(0);
             RenderTargetBitmap rtb = CanvasToBitmap();
             BitmapEncoder bmpEncoder = new BmpBitmapEncoder();  // опредиляем кодировщик, для кодирования изображения
             bmpEncoder.Frames.Add(BitmapFrame.Create(rtb));     // задайом фрейм для изображения
@@ -55,10 +58,37 @@ namespace GraphicsEditor.Model
             {
                 System.Windows.MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            canvas.Margin = margin;
+        }
+
+        public void InvertImage()
+        {
+            Thickness margin = canvas.Margin;
+            canvas.Margin = new Thickness(0);
+            RenderTargetBitmap rtb = CanvasToBitmap();
+            canvas.Margin = margin;
+            System.Drawing.Bitmap bitmap;
+            try
+            {
+                System.IO.MemoryStream ms = new System.IO.MemoryStream(); //Создаем поток в память.
+                BitmapEncoder bmpEncoder = new BmpBitmapEncoder();
+                bmpEncoder.Frames.Add(BitmapFrame.Create(rtb));
+                bmpEncoder.Save(ms);
+                bitmap = new System.Drawing.Bitmap(ms);
+                ms.Close();
+                InvertMethod(bitmap);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
+            
         }
 
         RenderTargetBitmap CanvasToBitmap()
         {
+            
             Size size = new Size(canvas.ActualWidth, canvas.ActualHeight);
             canvas.Measure(size);
             Rect rect = new Rect(size);   //Получаем ширину и высоту нашего будущего изображения(квадрата)
@@ -67,6 +97,34 @@ namespace GraphicsEditor.Model
             RenderTargetBitmap rtb = new RenderTargetBitmap((int)size.Width, (int)size.Height, dpi, dpi, System.Windows.Media.PixelFormats.Default); // через  обьект класса RenderTargetBitmap будем преобразовывать canvas в растровое изображение
             rtb.Render(canvas);
             return rtb;
+        }
+
+        void InvertMethod(System.Drawing.Bitmap bitmap)
+        {
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                for (int y = 0; y <bitmap.Height ; y++)
+                {
+                    System.Drawing.Color oldColor = bitmap.GetPixel(x,y);
+                    System.Drawing.Color newColor;
+                    newColor = System.Drawing.Color.FromArgb(oldColor.A, 255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
+                    bitmap.SetPixel(x, y, newColor);
+                }
+            }
+            BitmapImage image;
+            using (System.IO.MemoryStream stream = new System.IO.MemoryStream())        //convert Bitmap to BitmapImage
+            {
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+                stream.Position = 0;
+                image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+            }
+            canvas.Children.Clear();
+            canvas.Background = new ImageBrush(image);
         }
 
     }

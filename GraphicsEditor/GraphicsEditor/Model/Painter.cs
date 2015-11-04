@@ -10,7 +10,7 @@ namespace GraphicsEditor.Model
 {
     abstract class Painter
     {
-        abstract public void StartDrawing(Point point,BrushSettings bs);
+        abstract public void StartDrawing(Point point,Settings bs);
         abstract public void Drawing(Point point);
         abstract public void StopDrawing();
         abstract public void CanvasNull();

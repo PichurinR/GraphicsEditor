@@ -23,7 +23,7 @@ namespace GraphicsEditor.Model
 
         }
 
-        public override void StartDrawing(Point point,BrushSettings bs)
+        public override void StartDrawing(Point point,Settings bs)
         {
             flag = true;
             circle = new Ellipse();

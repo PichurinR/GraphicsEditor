@@ -24,14 +24,14 @@ namespace GraphicsEditor
     public partial class MainWindow : Window
     {
         Painter painter;
-        BrushSettings bs;
-        WorkingWithImages wi;
+        Settings bs;
+        WorkingWithImages wImg;
         public MainWindow()
         {
             InitializeComponent();
-            bs = new BrushSettings();
+            bs = new Settings();
             toolPencil_Click(new object(), new RoutedEventArgs());
-            wi = new WorkingWithImages(myCanvas);
+            wImg = new WorkingWithImages(myCanvas);
         }
 
 
@@ -95,18 +95,18 @@ namespace GraphicsEditor
 
         private void openFile_Click(object sender, RoutedEventArgs e)
         {
-            wi.OpenImages();
+            wImg.OpenImages();
         }
 
         private void saveFile_Click(object sender, RoutedEventArgs e)
         {
-            wi.SaveImage();
+            wImg.SaveImage();
            
         }
 
         private void edit_Click(object sender, RoutedEventArgs e)
         {
-                     
+            wImg.InvertImage();   
         }
 
      

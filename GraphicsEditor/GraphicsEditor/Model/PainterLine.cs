@@ -19,7 +19,7 @@ namespace GraphicsEditor.Model
         {
             this.canvas = canvas;
         }
-        public override void StartDrawing(Point point,BrushSettings bs)
+        public override void StartDrawing(Point point,Settings bs)
         {
             flag = true;
             line = new Line();
