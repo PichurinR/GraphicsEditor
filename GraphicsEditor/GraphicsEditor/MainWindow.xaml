@@ -114,11 +114,11 @@
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           SelectedColor="#FF020202" />
-        <ProgressBar Width="100"
+        <ProgressBar x:Name="progresBar" Width="100"
                      Height="15"
                      Margin="10,0,0,17"
                      HorizontalAlignment="Left"
-                     VerticalAlignment="Bottom" />
+                     VerticalAlignment="Bottom" Background="#FFE6E6E6" Foreground="#FF89E800" IsEnabled="False" />
         <xctk:ColorPicker x:Name="fillColorPick"
                           Width="102"
                           Margin="10,290,0,0"

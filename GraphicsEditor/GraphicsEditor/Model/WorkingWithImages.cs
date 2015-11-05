@@ -16,8 +16,10 @@ namespace GraphicsEditor.Model
     {
         Canvas canvas;
         BackgroundWorker bckGrWorker;
-        public WorkingWithImages(Canvas canvas)
+        ProgressBar progresBar;
+        public WorkingWithImages(Canvas canvas,ProgressBar progresBar)
         {
+            this.progresBar = progresBar;
             this.canvas = canvas;
             bckGrWorker = new BackgroundWorker();
             bckGrWorker.WorkerReportsProgress = true;   //Поддерж. обновление сведений о ходе выполнения.
@@ -28,7 +30,7 @@ namespace GraphicsEditor.Model
 
         void bckGrWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            progresBar.Value=e.ProgressPercentage;
         }
 
         void bckGrWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -48,6 +50,8 @@ namespace GraphicsEditor.Model
                 }
                 canvas.Children.Clear();
                 canvas.Background = new ImageBrush(image);
+                MessageBox.Show("Edit Completed!");
+                progresBar.Value = 0;
             }
             
         }
@@ -57,6 +61,7 @@ namespace GraphicsEditor.Model
             if (e.Argument is System.Drawing.Bitmap)
             {
                e.Result=InvertMethod((System.Drawing.Bitmap)e.Argument);
+               
             }
             
         }
@@ -144,7 +149,8 @@ namespace GraphicsEditor.Model
         System.Drawing.Bitmap InvertMethod(System.Drawing.Bitmap bitmap)
         {
 
-            for (int x = 0; x < bitmap.Width; x++)
+            int x;
+            for (x = 0; x < bitmap.Width; x++)
             {
                 for (int y = 0; y <bitmap.Height ; y++)
                 {
@@ -154,6 +160,7 @@ namespace GraphicsEditor.Model
                     bitmap.SetPixel(x, y, newColor);
                 }
                 System.Threading.Thread.Sleep(5);
+                bckGrWorker.ReportProgress((x*100)/bitmap.Width);
             }
           
             return bitmap;

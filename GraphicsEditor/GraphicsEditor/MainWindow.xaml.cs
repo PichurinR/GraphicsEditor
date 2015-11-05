@@ -31,7 +31,7 @@ namespace GraphicsEditor
             InitializeComponent();
             bs = new Settings();
             toolPencil_Click(new object(), new RoutedEventArgs());
-            wImg = new WorkingWithImages(myCanvas);
+            wImg = new WorkingWithImages(myCanvas,progresBar);
         }
 
 
