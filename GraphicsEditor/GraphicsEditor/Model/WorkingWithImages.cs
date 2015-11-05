@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,50 @@ namespace GraphicsEditor.Model
     class WorkingWithImages
     {
         Canvas canvas;
-
+        BackgroundWorker bckGrWorker;
         public WorkingWithImages(Canvas canvas)
         {
             this.canvas = canvas;
+            bckGrWorker = new BackgroundWorker();
+            bckGrWorker.WorkerReportsProgress = true;   //Поддерж. обновление сведений о ходе выполнения.
+            bckGrWorker.DoWork += bckGrWorker_DoWork;
+            bckGrWorker.RunWorkerCompleted += bckGrWorker_RunWorkerCompleted;
+            bckGrWorker.ProgressChanged += bckGrWorker_ProgressChanged;
+        }
+
+        void bckGrWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void bckGrWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null && e.Result is System.Drawing.Bitmap)
+            {
+                BitmapImage image;
+                using (System.IO.MemoryStream ms = new System.IO.MemoryStream())        //Бит
+                {
+                    ((System.Drawing.Bitmap)e.Result).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                    ms.Position = 0;
+                    image = new BitmapImage();
+                    image.BeginInit();
+                    image.StreamSource = ms;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+                }
+                canvas.Children.Clear();
+                canvas.Background = new ImageBrush(image);
+            }
+            
+        }
+
+        void bckGrWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (e.Argument is System.Drawing.Bitmap)
+            {
+               e.Result=InvertMethod((System.Drawing.Bitmap)e.Argument);
+            }
+            
         }
 
         public void OpenImages()
@@ -76,7 +117,8 @@ namespace GraphicsEditor.Model
                 bmpEncoder.Save(ms);
                 bitmap = new System.Drawing.Bitmap(ms);
                 ms.Close();
-                InvertMethod(bitmap);
+                bckGrWorker.RunWorkerAsync(bitmap);
+                
             }
             catch (Exception ex)
             {
@@ -99,7 +141,7 @@ namespace GraphicsEditor.Model
             return rtb;
         }
 
-        void InvertMethod(System.Drawing.Bitmap bitmap)
+        System.Drawing.Bitmap InvertMethod(System.Drawing.Bitmap bitmap)
         {
 
             for (int x = 0; x < bitmap.Width; x++)
@@ -111,20 +153,10 @@ namespace GraphicsEditor.Model
                     newColor = System.Drawing.Color.FromArgb(oldColor.A, 255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
                     bitmap.SetPixel(x, y, newColor);
                 }
+                System.Threading.Thread.Sleep(5);
             }
-            BitmapImage image;
-            using (System.IO.MemoryStream stream = new System.IO.MemoryStream())        //convert Bitmap to BitmapImage
-            {
-                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-                stream.Position = 0;
-                image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = stream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-            }
-            canvas.Children.Clear();
-            canvas.Background = new ImageBrush(image);
+          
+            return bitmap;
         }
 
     }
