@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -8,43 +9,24 @@ namespace GraphicsEditor.Model
 {
     class PainterPencil : Painter
      {
-        Canvas canvas;
         Polyline pencil;
-        bool flag = false;
-        PointCollection pointCollect;
-        public PainterPencil(Canvas canvas)
+        public override void StartDrawing(Canvas canvas)
         {
-            this.canvas = canvas;
-        }
-
-        
-        public override void StartDrawing(Point point,Settings bs)
-        {
-            flag = true;
             pencil = new Polyline();
-            pencil.Stroke = new SolidColorBrush(bs.colorStrocke);
+            pencil.Stroke = new SolidColorBrush(MySetting.colorStrocke);
             canvas.Children.Add(pencil);
-            pointCollect = new PointCollection();
-            pointCollect.Add(point);
         }
 
-        public override void Drawing(Point point)
+        public override void Drawing(Canvas canvas)
         {
-            if (flag)
+            if (pencil != null)
             {
-                pointCollect.Add(point);
-                pencil.Points = pointCollect;
+                pencil.Points.Add( Mouse.GetPosition(canvas));
             }
         }
-
         public override void StopDrawing()
         {
-            flag = false;
-        }
-
-        public override void CanvasNull()
-        {
-            throw new NotImplementedException();
+            pencil=null;
         }
     }
 }

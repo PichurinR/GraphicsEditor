@@ -21,13 +21,14 @@
             </Canvas.Effect>
         </Canvas>
         <Button x:Name="toolPencil"
+                Tag="Pencil"
                 Width="45"
                 Height="45"
                 Margin="10,109,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 VerticalContentAlignment="Top"
-                Click="toolPencil_Click"
+                Click="tool_Click"
                 Content="✎"
                 FontSize="36"
                 FontWeight="Bold"
@@ -38,13 +39,14 @@
         </Button>
 
         <Button x:Name="toolLine"
+                Tag="Line"
                 Width="45"
                 Height="45"
                 Margin="64,109,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 VerticalContentAlignment="Top"
-                Click="toolLine_Click"
+                Click="tool_Click"
                 Content="|"
                 FontSize="36"
                 FontWeight="Bold"
@@ -54,13 +56,14 @@
             </Button.Effect>
         </Button>
         <Button x:Name="toolRectangle"
+                Tag="Rectangle"
                 Width="45"
                 Height="45"
                 Margin="10,159,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 VerticalContentAlignment="Top"
-                Click="toolRectangle_Click"
+                Click="tool_Click"
                 Content="□"
                 FontSize="54"
                 FontWeight="Bold"
@@ -70,13 +73,14 @@
             </Button.Effect>
         </Button>
         <Button x:Name="toolCircle"
+                Tag="Circle"
                 Width="45"
                 Height="45"
                 Margin="64,159,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 VerticalContentAlignment="Top"
-                Click="toolCircle_Click"
+                Click="tool_Click"
                 Content="○"
                 FontSize="40"
                 FontWeight="Bold"
@@ -113,7 +117,7 @@
                           Margin="10,245,0,0"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
-                          SelectedColor="#FF020202" />
+                          SelectedColor="#FF020202" SelectedColorChanged="strokeColorPick_SelectedColorChanged" />
         <ProgressBar x:Name="progresBar" Width="100"
                      Height="15"
                      Margin="10,0,0,17"
@@ -124,10 +128,9 @@
                           Margin="10,290,0,0"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
-                          IsEnabled="False"
                           RenderTransformOrigin="-0.02,0.364"
                           SelectedColor="White"
-                          UsingAlphaChannel="False" />
+                          UsingAlphaChannel="False" SelectedColorChanged="fillColorPick_SelectedColorChanged" />
         <Label Width="99"
                Height="25"
                Margin="10,224,0,0"

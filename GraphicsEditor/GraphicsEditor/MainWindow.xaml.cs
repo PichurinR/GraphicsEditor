@@ -1,4 +1,5 @@
-﻿using GraphicsEditor.Model;
+﻿using GraphicsEditor.Controller;
+using GraphicsEditor.Model;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -23,92 +24,71 @@ namespace GraphicsEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        Painter painter;
-        Settings bs;
-        WorkingWithImages wImg;
+        
+        
+        ProgControll controller;
         public MainWindow()
         {
             InitializeComponent();
-            bs = new Settings();
-            toolPencil_Click(new object(), new RoutedEventArgs());
-            wImg = new WorkingWithImages(myCanvas,progresBar);
+            MySetting.colorStrocke = strokeColorPick.SelectedColor.Value;
+            MySetting.colorFill = fillColorPick.SelectedColor.Value;
+            controller = new ProgControll(myCanvas, progresBar);
+           
         }
 
 
 
-        private void toolPencil_Click(object sender, RoutedEventArgs e)
+        private void tool_Click(object sender, RoutedEventArgs e)
         {
-            painter = new PainterPencil(myCanvas);
-            fillColorPick.IsEnabled = false;
+            controller.SetPaintBrush(((Button)sender).Tag.ToString());
         }
-
-        private void toolLine_Click(object sender, RoutedEventArgs e)
-        {
-            painter = new PainterLine(myCanvas);
-            fillColorPick.IsEnabled = false;
-        }
-
-        private void toolRectangle_Click(object sender, RoutedEventArgs e)
-        {
-            painter = new PainterRectangle(myCanvas);
-            fillColorPick.IsEnabled = true;
-        }
-
-        private void toolCircle_Click(object sender, RoutedEventArgs e)
-        {
-            painter = new PainterCircle(myCanvas);
-            fillColorPick.IsEnabled = true;
-        }
-
+          
         private void myCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
-            if (painter != null)
-            {
-                bs.colorStrocke = strokeColorPick.SelectedColor.Value;
-                bs.colorFill = fillColorPick.SelectedColor.Value;
-                painter.StartDrawing(new Point(e.GetPosition(myCanvas).X, e.GetPosition(myCanvas).Y), bs);
-            }
+            controller.StartDrawing();               
         }
 
         private void myCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (painter != null)
-            {
-                painter.Drawing(new Point(e.GetPosition(myCanvas).X, e.GetPosition(myCanvas).Y));
-            }
+            controller.Drawing();
         }
 
         private void myCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (painter != null)
-            {
-                painter.StopDrawing();
-            }
+            controller.StopDrawing();
         }
 
         private void clearButton_Click(object sender, RoutedEventArgs e)
         {
-            myCanvas.Children.Clear();
-            myCanvas.Background = Brushes.White;
+            controller.ClearCanvas();
         }
 
         private void openFile_Click(object sender, RoutedEventArgs e)
         {
-            wImg.OpenImages();
+            controller.OpenFile();
         }
 
         private void saveFile_Click(object sender, RoutedEventArgs e)
         {
-            wImg.SaveImage();
-           
+            controller.SaveFile();           
         }
 
         private void edit_Click(object sender, RoutedEventArgs e)
         {
-            wImg.InvertImage();   
+            controller.EditImg();            
         }
 
+        private void strokeColorPick_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            MySetting.colorStrocke = strokeColorPick.SelectedColor.Value;
+        }
+
+        private void fillColorPick_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            MySetting.colorFill = fillColorPick.SelectedColor.Value;
+        }
+
+        
      
     }
 }

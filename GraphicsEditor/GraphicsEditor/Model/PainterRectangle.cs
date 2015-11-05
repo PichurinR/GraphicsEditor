@@ -1,41 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace GraphicsEditor.Model
 {
     class PainterRectangle:Painter
     {
-        Canvas canvas;
         Rectangle rectangl;
-        bool flag = false;
         Point startPoint;
 
-        public PainterRectangle(Canvas canvas)
+        public override void StartDrawing(Canvas canvas)
         {
-            this.canvas = canvas;
-        }
-        public override void StartDrawing(Point point, Settings bs)
-        {
-            flag = true;
             rectangl = new Rectangle();
-            rectangl.Stroke = new SolidColorBrush(bs.colorStrocke);
-            rectangl.Fill= new SolidColorBrush(bs.colorFill);
+            rectangl.Stroke = new SolidColorBrush(MySetting.colorStrocke);
+            rectangl.Fill = new SolidColorBrush(MySetting.colorFill);
             canvas.Children.Add(rectangl);
-            startPoint = point;
+            startPoint = Mouse.GetPosition(canvas);
         }
 
-        public override void Drawing(Point point)
+        public override void Drawing(Canvas canvas)
         {
-            if (flag)
+            if (rectangl != null)
             {
-                Point pos = point;
+                Point pos = Mouse.GetPosition(canvas);
 
                 double x = Math.Min(pos.X, startPoint.X);
                 double y = Math.Min(pos.Y, startPoint.Y);
@@ -53,12 +44,8 @@ namespace GraphicsEditor.Model
 
         public override void StopDrawing()
         {
-            flag = false;
+            rectangl = null;
         }
 
-        public override void CanvasNull()
-        {
-           
-        }
     }
 }

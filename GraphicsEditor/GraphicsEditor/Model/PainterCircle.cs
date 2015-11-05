@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -11,33 +10,23 @@ namespace GraphicsEditor.Model
 {
     class PainterCircle : Painter
     {
-       
-        Canvas canvas;
         Ellipse circle;
-        bool flag = false;
         Point startPoint;
-      
-        public PainterCircle(Canvas canvas)
-        {
-            this.canvas = canvas;
 
-        }
-
-        public override void StartDrawing(Point point,Settings bs)
+        public override void StartDrawing(Canvas canvas)
         {
-            flag = true;
             circle = new Ellipse();
-            circle.Stroke = new SolidColorBrush(bs.colorStrocke);
-            circle.Fill = new SolidColorBrush(bs.colorFill);
+            circle.Stroke = new SolidColorBrush(MySetting.colorStrocke);
+            circle.Fill = new SolidColorBrush(MySetting.colorFill);
             canvas.Children.Add(circle);
-            startPoint = point;
+            startPoint = Mouse.GetPosition(canvas);
         }
 
-        public override void Drawing(Point point)
+        public override void Drawing(Canvas canvas)
         {
-            if (flag)
+            if (circle!=null)
             {
-                Point pos = point;
+                Point pos = Mouse.GetPosition(canvas);
 
                 double x = Math.Min(pos.X, startPoint.X);
                 double y = Math.Min(pos.Y, startPoint.Y);
@@ -55,11 +44,8 @@ namespace GraphicsEditor.Model
          
         public override void StopDrawing()
         {
-            flag = false;
+            circle = null;
         }
-        public override void CanvasNull()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

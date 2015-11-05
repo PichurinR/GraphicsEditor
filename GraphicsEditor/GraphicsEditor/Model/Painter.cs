@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,10 +7,10 @@ namespace GraphicsEditor.Model
 {
     abstract class Painter
     {
-        abstract public void StartDrawing(Point point,Settings bs);
-        abstract public void Drawing(Point point);
-        abstract public void StopDrawing();
-        abstract public void CanvasNull();
         
+        abstract public void StartDrawing(Canvas canvas);
+        abstract public void Drawing(Canvas canvas);
+        abstract public void StopDrawing();
+               
     }
 }

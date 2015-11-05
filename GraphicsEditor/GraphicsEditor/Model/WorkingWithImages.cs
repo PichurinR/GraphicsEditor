@@ -1,10 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -28,6 +25,10 @@ namespace GraphicsEditor.Model
             bckGrWorker.ProgressChanged += bckGrWorker_ProgressChanged;
         }
 
+        public bool IsInvertWork 
+        {
+            get { return bckGrWorker.IsBusy; }
+        }
         void bckGrWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progresBar.Value=e.ProgressPercentage;
@@ -38,8 +39,9 @@ namespace GraphicsEditor.Model
             if (e.Result != null && e.Result is System.Drawing.Bitmap)
             {
                 BitmapImage image;
-                using (System.IO.MemoryStream ms = new System.IO.MemoryStream())        //Бит
-                {
+                try 
+	            {
+                    System.IO.MemoryStream ms = new System.IO.MemoryStream();   //Конвертируем Bitmap в BitmapImag и выводим на холст. 
                     ((System.Drawing.Bitmap)e.Result).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
                     ms.Position = 0;
                     image = new BitmapImage();
@@ -47,25 +49,34 @@ namespace GraphicsEditor.Model
                     image.StreamSource = ms;
                     image.CacheOption = BitmapCacheOption.OnLoad;
                     image.EndInit();
-                }
-                canvas.Children.Clear();
-                canvas.Background = new ImageBrush(image);
-                MessageBox.Show("Edit Completed!");
+                    canvas.Children.Clear();
+                    canvas.Background = new ImageBrush(image);
+                    MessageBox.Show("Edit Completed!");
+	            }
+	            catch (Exception ex)
+	            {
+                    System.Windows.MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+	            }
                 progresBar.Value = 0;
+                }
+                 
             }
             
-        }
-
+        
         void bckGrWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             if (e.Argument is System.Drawing.Bitmap)
             {
                e.Result=InvertMethod((System.Drawing.Bitmap)e.Argument);
-               
             }
             
         }
 
+        public void ClearCanvas()
+        {
+            canvas.Children.Clear();
+            canvas.Background = Brushes.White;
+        }
         public void OpenImages()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -84,7 +95,7 @@ namespace GraphicsEditor.Model
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = "c:\\";
-            saveFileDialog.FileName = "Picture_"+DateTime.Now.GetHashCode();      // Имя по умолчанию
+            saveFileDialog.FileName = "Picture"+DateTime.Now.GetHashCode();      // Имя по умолчанию
             saveFileDialog.Filter = "BMP files (*.bmp)|*.bmp";
             saveFileDialog.ShowDialog();
             
@@ -146,9 +157,8 @@ namespace GraphicsEditor.Model
             return rtb;
         }
 
-        System.Drawing.Bitmap InvertMethod(System.Drawing.Bitmap bitmap)
+        System.Drawing.Bitmap InvertMethod(System.Drawing.Bitmap bitmap)    //метод инвертирование рисунка
         {
-
             int x;
             for (x = 0; x < bitmap.Width; x++)
             {
@@ -162,7 +172,6 @@ namespace GraphicsEditor.Model
                 System.Threading.Thread.Sleep(5);
                 bckGrWorker.ReportProgress((x*100)/bitmap.Width);
             }
-          
             return bitmap;
         }
 
